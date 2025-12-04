@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover, maximum-scale=1, minimum-scale=1, user-scalable=no">
+          <title>🐲 DragonFlyX 🚁</title>
+          <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+          <meta http-equiv="Pragma" content="no-cache" />
+          <meta http-equiv="Expires" content="0" />
+          <script src="https://cdn.tailwindcss.com"></script>
+          <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚁</text></svg>">
+          <meta name="theme-color" content="#1B2A4E">
+          <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+          <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+          <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+          <meta name="description" content="🐲 DragonFlyX 🚁">
+          <meta property="og:title" content="🐲 DragonFlyX 🚁"/>
+          <meta property="og:image"
+                content="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚁</text></svg>"/>
+          <meta property="og:description" content="🐲 DragonFlyX 🚁"/>
+          <link rel=icon
+                href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚁</text></svg>"
+                sizes="16x16" type="image/png">
+          <link rel="apple-touch-icon"
+                href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚁</text></svg>"/>
+          <link rel="apple-touch-startup-image"
+                href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚁</text></svg>">
+          <meta name="apple-mobile-web-app-capable" content="yes">
+          <meta name="msapplication-TileImage"
+                content="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚁</text></svg>"/>
+          <script>
+              if ('serviceWorker' in navigator) {
+                  navigator.serviceWorker.register('pwa.js').then(function () {
+                      console.log('Service Worker 註冊成功');
+                  });
+              }
+          </script>
+
+    <!-- 1. 引入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        //禁止拖動
+        document.addEventListener("dragstart", function (e) {
+            e.preventDefault();
+        });
+
+        //禁用部分組合
+        /*document.addEventListener("keydown", function (e) {
+            // F12
+            if (e.keyCode == 123) {
+                e.preventDefault();
+                // Ctrl+Shift+I
+            } else if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+                e.preventDefault();
+                // Shift+F10
+            } else if (e.shiftKey && e.keyCode == 121) {
+                e.preventDefault();
+                // Ctrl+U
+            } else if (e.ctrlKey && e.keyCode == 85) {
+                e.preventDefault();
+                // Command+Option+I
+            } else if (e.metaKey && e.altKey && e.keyCode == 73) {
+                e.preventDefault();
+            }
+        });*/
+
+        //禁止雙擊縮放
+        let lastTouchEndTime = 0;
+        document.addEventListener('touchend', (event) => {
+            const now = new Date().getTime();
+            if ((now - lastTouchEndTime) <= 300) {      // 偵測時間差是否小於 300ms
+                event.preventDefault();
+            }
+            lastTouchEndTime = now;
+        }, false);
+
+        // [Safari only] gesturestart event: multi finger gestures touching
+        document.addEventListener('gesturestart', function (event) {
+            // 阻止兩指縮放畫面
+            event.preventDefault();
+        });
+    </script>
+    <!-- 2. 系統字體設定 -->
+    <style>
+      body {
+        /* 使用系統字體 */
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        /* 設定輕微的背景色 */
+        background-color: #f3f4f6;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
