@@ -205,10 +205,10 @@ if (!admin.apps.length) {
   admin.initializeApp({
     credential: creds
       ? admin.credential.cert({
-          projectId: creds.project_id,
-          clientEmail: creds.client_email,
-          privateKey: creds.private_key,
-        })
+        projectId: creds.project_id,
+        clientEmail: creds.client_email,
+        privateKey: creds.private_key,
+      })
       : admin.credential.applicationDefault(),
     httpAgent: ipv4Agent,
   });
@@ -274,8 +274,8 @@ let generativeModel = null;
 let activeGeminiModel = null;
 
 const MAX_TOKENS_PRIMARY = parseInt(process.env.GEMINI_MAX_TOKENS || '640', 10);
-const MAX_TOKENS_RETRY   = parseInt(process.env.GEMINI_MAX_TOKENS_RETRY || '1024', 10);
-const SOFT_TIMEOUT_MS    = parseInt(process.env.GEMINI_SOFT_TIMEOUT_MS || '4000', 10);
+const MAX_TOKENS_RETRY = parseInt(process.env.GEMINI_MAX_TOKENS_RETRY || '1024', 10);
+const SOFT_TIMEOUT_MS = parseInt(process.env.GEMINI_SOFT_TIMEOUT_MS || '4000', 10);
 
 function summarizeGeminiError(err) {
   const msg = err?.message || String(err);
@@ -700,6 +700,29 @@ app.post('/api/itineraries/:id/comments', verifyFirebaseToken, async (req, res) 
   }
 });
 
+app.delete('/api/itineraries/:id/comments/:commentId', verifyFirebaseToken, async (req, res) => {
+  try {
+    const { id: itineraryId, commentId } = req.params;
+    const email = req.user?.email;
+    if (!email) return res.status(400).send({ message: 'Missing user email in token' });
+
+    const commentRef = db.collection('comments').doc(itineraryId).collection('items').doc(commentId);
+    const doc = await commentRef.get();
+    if (!doc.exists) return res.status(404).send({ message: 'Comment not found' });
+
+    const data = doc.data();
+    if (data.email !== email) {
+      return res.status(403).send({ message: 'You can only delete your own comments' });
+    }
+
+    await commentRef.delete();
+    return res.send({ message: 'Comment deleted successfully' });
+  } catch (err) {
+    log('ERROR', 'delete comment error', { error: String(err?.message || err) });
+    return res.status(500).send({ message: 'Failed to delete comment' });
+  }
+});
+
 // Travellers ensure
 const uploadMulter = multer({ storage: multer.memoryStorage() });
 app.post('/api/travellers/ensure', verifyFirebaseToken, async (req, res) => {
@@ -733,7 +756,7 @@ app.post('/api/upload-avatar', verifyFirebaseToken, uploadMulter.single('avatar'
     const bucket = storage.bucket(BUCKET_NAME);
     const gcFile = bucket.file(destFileName);
     await gcFile.save(file.buffer, { metadata: { contentType: 'image/jpeg', cacheControl: 'public, max-age=3600' }, resumable: false, timeout: 30000 });
-    await gcFile.makePublic().catch(() => {});
+    await gcFile.makePublic().catch(() => { });
     return res.status(200).send({ message: 'Avatar uploaded.' });
   } catch (err) {
     log('ERROR', 'Upload avatar error', { error: String(err?.message || err) });

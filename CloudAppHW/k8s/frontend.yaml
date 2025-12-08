@@ -5,8 +5,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 80
-    targetPort: 80
+    - port: 5001
+      targetPort: 80
   selector:
     app: frontend
 ---
@@ -25,8 +25,8 @@ spec:
         app: frontend
     spec:
       containers:
-      - image: frontend-vue:latest
-        name: frontend
-        imagePullPolicy: Never
-        ports:
-        - containerPort: 80
+        - image: frontend-vue:latest
+          name: frontend
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
