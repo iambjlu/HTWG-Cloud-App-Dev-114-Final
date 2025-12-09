@@ -57,6 +57,8 @@ async function startAiPolling(itineraryId, { intervalMs = 2000, maxTries = 8 } =
       clearAiTimer();
     }
   }, intervalMs);
+}
+
 // --- Format AI Text (Simple Markdown) ---
 function formatAiText(text) {
   if (!text) return '';
@@ -458,9 +460,9 @@ async function deleteComment(commentId, commentEmail) {
         class="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
         @click.self="closeLikeList"
     >
-      <div class="bg-white rounded-lg shadow-xl w-full max-w-sm p-4">
+      <div class="bg-gray-900 rounded-lg shadow-xl w-full max-w-sm p-4 border border-gray-700">
         <div class="flex justify-between items-start mb-3">
-          <h3 class="text-lg font-semibold text-gray-800">
+          <h3 class="text-lg font-semibold text-white">
             Likes
           </h3>
 <!--          <button-->
@@ -479,14 +481,14 @@ async function deleteComment(commentId, commentEmail) {
           <li
               v-for="u in likeListUsers"
               :key="u.email"
-              class="flex items-center justify-between text-sm text-gray-700 border-b pb-1"
+              class="flex items-center justify-between text-sm text-gray-300 border-b border-gray-700 pb-1"
           ><span class="break-all">
             <a
                 :href="'/?profile=' + u.email"
-                class="text-indigo-600 hover:underline">{{ u.email }}
+                class="text-cyan-400 hover:underline">{{ u.email }}
               </a>
           </span>
-            <span class="text-[10px] text-gray-400">
+            <span class="text-[10px] text-gray-500">
               {{ new Date(u.liked_at).toLocaleString() }}
             </span>
           </li>
@@ -494,7 +496,7 @@ async function deleteComment(commentId, commentEmail) {
 
         <div class="mt-4 flex justify-end">
           <button
-              class="px-3 py-1 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+              class="px-3 py-1 text-sm bg-gray-800 border-2 border-cyan-500 text-cyan-500 font-bold rounded-md hover:bg-gray-700 shadow-[0_0_10px_rgba(6,182,212,0.5)] transition"
               @click="closeLikeList"
           >
             Close
@@ -505,39 +507,39 @@ async function deleteComment(commentId, commentEmail) {
 
     <!-- LIST -->
     <div
-        class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 overflow-y-auto max-h-[80vh]"
+        class="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700 overflow-y-auto max-h-[80vh]"
     >
       <!-- Header -->
       <div
-          class="flex justify-between items-start border-b pb-3 mb-4 flex-col md:flex-row md:items-center"
+          class="flex justify-between items-start border-b border-gray-700 pb-3 mb-4 flex-col md:flex-row md:items-center"
       >
         <div class="flex flex-col">
           <div class="flex items-center space-x-2">
-            <h2 class="text-xl font-semibold text-gray-800">Trips</h2>
+            <h2 class="text-xl font-semibold text-white">Trips</h2>
 
             <span
                 class="text-[11px] font-medium rounded px-2 py-0.5"
                 :class="showAll
-                ? 'bg-indigo-100 text-indigo-700 border border-indigo-300'
-                : 'bg-gray-100 text-gray-700 border border-gray-300'"
+                ? 'bg-cyan-900 text-cyan-200 border border-cyan-700'
+                : 'bg-gray-800 text-gray-300 border border-gray-600'"
             >
               {{ showAll ? 'All users' : (isViewingSelf ? 'Only me' : 'This user only') }}
             </span>
           </div>
 
-          <p v-if="loading" class="text-indigo-600 text-sm font-medium mt-1">
+          <p v-if="loading" class="text-cyan-400 text-sm font-medium mt-1">
             ⏳ Loading ⏳
           </p>
           <p
               v-if="error && !loading"
-              class="text-red-600 text-sm font-medium mt-1"
+              class="text-red-400 text-sm font-medium mt-1"
           >
             {{ error }}
           </p>
         </div>
 
         <button
-            class="mt-3 md:mt-0 text-sm font-medium text-white bg-black hover:bg-gray-800 rounded-md px-4 py-2 transition"
+            class="mt-3 md:mt-0 text-sm font-bold text-gray-300 bg-gray-800 border-2 border-gray-500 hover:bg-gray-700 rounded-md px-4 py-2 transition shadow-[0_0_10px_rgba(156,163,175,0.5)]"
             @click="fetchItineraries"
         >
           Refresh
@@ -550,21 +552,21 @@ async function deleteComment(commentId, commentEmail) {
       >
         <div class="flex items-center flex-grow space-x-2">
           <label
-              class="text-sm font-medium text-gray-700 whitespace-nowrap"
+              class="text-sm font-medium text-gray-300 whitespace-nowrap"
           >Search:</label
           >
           <input
               type="text"
               v-model="filterText"
               placeholder="Search trips..."
-              class="flex-grow p-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+              class="flex-grow p-2 border border-gray-600 rounded-md bg-gray-800 text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition outline-none"
           />
         </div>
 
         <div class="flex items-center justify-end space-x-2 shrink-0">
           <button
               type="button"
-              class="py-2 px-4 rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition"
+              class="py-2 px-4 rounded-md text-cyan-500 font-bold bg-gray-800 border-2 border-cyan-500 hover:bg-gray-700 transition shadow-[0_0_10px_rgba(6,182,212,0.5)]"
               @click="viewOnlyThisUser"
           >
             View Only This User
@@ -572,10 +574,10 @@ async function deleteComment(commentId, commentEmail) {
 
           <button
               type="button"
-              class="py-2 px-4 rounded-md border transition"
+              class="py-2 px-4 rounded-md border-2 transition font-bold shadow-[0_0_10px_rgba(156,163,175,0.5)]"
               :class="isViewingSelf
-              ? 'text-gray-800 bg-gray-100 border-gray-300 hover:bg-gray-200'
-              : 'text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed opacity-0'"
+              ? 'text-gray-300 bg-gray-800 border-gray-500 hover:bg-gray-700'
+              : 'text-gray-500 bg-gray-800 border-gray-700 cursor-not-allowed opacity-0'"
               @click="viewAllTrips"
           >
             View All Trips
@@ -591,17 +593,17 @@ async function deleteComment(commentId, commentEmail) {
             @click="viewDetails(it.id)"
             class="p-3 border-l-4 rounded-md cursor-pointer transition duration-150 ease-in-out"
             :class="{
-            'bg-indigo-50 border-indigo-400': selectedItinerary && selectedItinerary.id === it.id,
-            'bg-gray-50 border-gray-200 hover:bg-gray-100': !(selectedItinerary && selectedItinerary.id === it.id)
+            'bg-gray-800 border-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.5)]': selectedItinerary && selectedItinerary.id === it.id,
+            'bg-gray-800 border-gray-600 hover:bg-gray-700 hover:border-gray-500': !(selectedItinerary && selectedItinerary.id === it.id)
           }"
         >
-          <p class="font-semibold text-gray-800">
+          <p class="font-semibold text-white">
             {{ it.title }}
-            <span class="text-sm text-gray-500">
+            <span class="text-sm text-gray-400">
               (
               <a
                   :href="'/?profile=' + it.traveller_email"
-                  class="text-indigo-600 hover:underline"
+                  class="text-cyan-400 hover:underline"
                   @click.stop
               >
                 {{ it.traveller_email }}
@@ -611,7 +613,7 @@ async function deleteComment(commentId, commentEmail) {
           </p>
 
           <!-- second line: desc + dates -->
-          <p class="text-sm text-gray-600">
+          <p class="text-sm text-gray-400">
             {{ it.short_description }}
             <span class="ml-1 text-xs text-gray-500">
               {{ it.start_date }} ~ {{ it.end_date }}
@@ -625,8 +627,8 @@ async function deleteComment(commentId, commentEmail) {
               <button
                   class="flex items-center space-x-2 text-sm font-medium px-3 py-1.5 rounded-md border"
                   :class="likeMap[it.id]
-                ? 'bg-gray-200 text-gray-800 border-gray-300 hover:bg-gray-300'
-                : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'"
+                ? 'bg-gray-700 text-white border-gray-600 hover:bg-gray-600'
+                : 'bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700'"
                   @click.stop="toggleLike(it.id)"
                   :title="likeMap[it.id] ? 'Unlike' : 'Like'"
 
@@ -639,7 +641,7 @@ async function deleteComment(commentId, commentEmail) {
 
               <!-- 數字（灰底圓角，黑字），點了看名單 -->
               <button
-                  class="text-[11px] font-medium text-gray-800 bg-gray-200 rounded-full px-2 py-0.5 hover:bg-gray-300"
+                  class="text-[11px] font-medium text-white bg-gray-700 rounded-full px-2 py-0.5 hover:bg-gray-600"
                   @click.stop="showLikeList(it.id)"
               >
                 {{ likeCountMap[it.id] ?? 0 }}
@@ -656,7 +658,7 @@ async function deleteComment(commentId, commentEmail) {
 
     <!-- DETAIL -->
     <div
-        class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 overflow-y-auto max-h-[90vh]"
+        class="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700 overflow-y-auto max-h-[90vh]"
     >
       <h2 v-if="!selectedItinerary" class="text-xl font-semibold text-gray-400">
         Select a trip to view details
@@ -666,17 +668,17 @@ async function deleteComment(commentId, commentEmail) {
         <!-- VIEW MODE -->
         <div v-if="!isEditing">
           <h2
-              class="text-3xl font-bold mb-4 text-gray-800 border-b pb-2 text-center"
+              class="text-3xl font-bold mb-4 text-white border-b border-gray-700 pb-2 text-center"
           >
             {{ selectedItinerary.title }}
           </h2>
 
-          <div class="space-y-2 text-gray-700 text-center border-b pb-4">
+          <div class="space-y-2 text-gray-300 text-center border-b border-gray-700 pb-4">
             <p>
               <strong>Owner:</strong>
               <a
                   :href="'/?profile=' + selectedItinerary.traveller_email"
-                  class="text-indigo-600 hover:underline"
+                  class="text-cyan-400 hover:underline"
               >
                 {{ selectedItinerary.traveller_email }}
               </a>
@@ -687,13 +689,13 @@ async function deleteComment(commentId, commentEmail) {
             <p><strong>Short Description:</strong> {{ selectedItinerary.short_description }}</p>
           </div>
 
-          <div class="pt-4 border-b pb-4 text-center">
-            <p class="font-semibold text-gray-800">Long Description:</p>
-            <p class="whitespace-pre-wrap text-gray-700 mt-2">
+          <div class="pt-4 border-b border-gray-700 pb-4 text-center">
+            <p class="font-semibold text-white">Long Description:</p>
+            <p class="whitespace-pre-wrap text-gray-300 mt-2">
               {{ selectedItinerary.detail_description }}
             </p>
             <!-- AI Suggestion block -->
-            <div v-if="selectedItinerary.aiSuggestion || (aiStatus !== 'idle' && aiStatus !== 'no_suggestion')" class="mt-6 border-t pt-4">
+            <div v-if="selectedItinerary.aiSuggestion || (aiStatus !== 'idle' && aiStatus !== 'no_suggestion')" class="mt-6 border-t border-gray-700 pt-4">
               <h2 class="text-3xl font-semibold mb-2 bg-[linear-gradient(90deg,_#0A84FF_0%,_#5E5CE6_20%,_#BF5AF2_40%,_#FF2D55_60%,_#FF6961_75%,_#FF9F0A_100%)] bg-clip-text text-transparent">
                 Gemini AI Travel Suggestion
               </h2>
@@ -703,20 +705,28 @@ async function deleteComment(commentId, commentEmail) {
       v-if="aiStatus !== 'idle'&&aiStatus !== 'ok'"
       class="inline-block text-xs px-2 py-0.5 mb-2 rounded border"
       :class="{
-      'bg-yellow-50 text-yellow-700 border-yellow-200': aiStatus === 'queued',
-      'bg-green-50 text-green-700 border-green-200': aiStatus === 'ok',
-      'bg-gray-50 text-gray-700 border-gray-200': aiStatus === 'no_suggestion',
-      'bg-red-50 text-red-700 border-red-200': aiStatus === 'error'
+      'bg-yellow-900/50 text-yellow-200 border-yellow-700': aiStatus === 'queued',
+      'bg-green-900/50 text-green-200 border-green-700': aiStatus === 'ok',
+      'bg-gray-800 text-gray-400 border-gray-600': aiStatus === 'no_suggestion',
+      'bg-red-900/50 text-red-200 border-red-700': aiStatus === 'error'
     }"
   >
     Status: ● {{ aiStatus.toUpperCase() }}
 
   </span>
               </div>
-              <div
-                  class="text-gray-700 text-sm bg-gray-100 p-3 rounded-md whitespace-pre-wrap leading-relaxed font-sans text-left border"
-                  v-html="formatAiText(selectedItinerary.aiSuggestion)"
-              >
+              <div class="relative rounded-xl shadow-[0_0_20px_rgba(192,132,252,0.4)] overflow-hidden">
+                <!-- Gradient Border -->
+                <span class="absolute inset-0 rounded-xl bg-[linear-gradient(90deg,#00C6FF,#0072FF,#FF00E6,#FFD700)] blur-[4px] opacity-100"></span>
+                <!-- Inner Background -->
+                <span class="absolute inset-[3px] rounded-xl bg-gray-800"></span>
+
+                <!-- Content -->
+                <div
+                    class="relative z-10 text-gray-300 text-sm p-4 whitespace-pre-wrap leading-relaxed text-left"
+                    v-html="formatAiText(selectedItinerary.aiSuggestion)"
+                >
+                </div>
               </div>
             </div>
             <!--              disclaimer-->
@@ -732,8 +742,8 @@ async function deleteComment(commentId, commentEmail) {
                 @click="toggleLike(selectedItinerary.id)"
                 class="flex items-center space-x-2 text-sm font-medium px-3 py-1.5 rounded-md border"
                 :class="likeMap[selectedItinerary.id]
-                ? 'bg-gray-200 text-gray-800 border-gray-300 hover:bg-gray-300'
-                : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'"
+                ? 'bg-gray-700 text-white border-gray-600 hover:bg-gray-600'
+                : 'bg-gray-800 text-gray-300 border-gray-700 hover:bg-gray-700'"
             >
               <span class="text-lg leading-none">
                 {{ likeMap[selectedItinerary.id] ? '❤️' : '🤍' }}
@@ -741,7 +751,7 @@ async function deleteComment(commentId, commentEmail) {
               <span>{{ likeMap[selectedItinerary.id] ? 'Liked' : 'Like' }}</span>
             </button>
             <button
-                class="text-[11px] font-medium text-gray-800 bg-gray-200 rounded-full px-2 py-0.5 hover:bg-gray-300"
+                class="text-[11px] font-medium text-white bg-gray-700 rounded-full px-2 py-0.5 hover:bg-gray-600"
                 @click="showLikeList(selectedItinerary.id)"
             >
               {{ likeCountMap[selectedItinerary.id] ?? 0 }}
@@ -750,8 +760,8 @@ async function deleteComment(commentId, commentEmail) {
           </div>
 
           <!-- 💬 Comments block -->
-          <div class="mt-8 border-t pt-4">
-            <h3 class="text-lg font-semibold text-gray-800 text-center mb-4">
+          <div class="mt-8 border-t border-gray-700 pt-4">
+            <h3 class="text-lg font-semibold text-white text-center mb-4">
               Comments
             </h3>
 
@@ -763,12 +773,12 @@ async function deleteComment(commentId, commentEmail) {
               <textarea
                   v-model="newCommentText"
                   rows="3"
-                  class="w-full border border-gray-300 rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  class="w-full border border-gray-600 bg-gray-800 text-white rounded-md p-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
                   placeholder="Write a comment..."
               ></textarea>
 
               <button
-                  class="self-end bg-indigo-600 text-white text-sm font-medium px-3 py-1.5 rounded-md hover:bg-indigo-700 disabled:opacity-50"
+                  class="self-end bg-gray-800 border-2 border-cyan-500 text-cyan-500 text-sm font-bold px-3 py-1.5 rounded-md hover:bg-gray-700 shadow-[0_0_10px_rgba(6,182,212,0.5)] transition disabled:opacity-50 disabled:shadow-none"
                   :disabled="postingComment"
                   @click="submitComment"
               >
@@ -789,17 +799,17 @@ async function deleteComment(commentId, commentEmail) {
               <li
                   v-for="c in comments"
                   :key="c.id"
-                  class="border border-gray-200 rounded-md p-3 text-sm bg-gray-50"
+                  class="border border-gray-700 rounded-md p-3 text-sm bg-gray-800"
               >
                 <div class="flex justify-between items-start">
-                  <div class="text-gray-800 break-all">
+                  <div class="text-white break-all">
                     <a
                         :href="'/?profile=' + c.email"
-                        class="text-indigo-600 hover:underline font-medium"
+                        class="text-cyan-400 hover:underline font-medium"
                     >
                       {{ c.email }}
                     </a>
-                    <span class="ml-2 text-[11px] text-gray-400">
+                    <span class="ml-2 text-[11px] text-gray-500">
                       {{ new Date(c.created_at).toLocaleString() }}
                     </span>
                   </div>
@@ -814,7 +824,7 @@ async function deleteComment(commentId, commentEmail) {
                   </button>
                 </div>
 
-                <p class="mt-2 text-gray-700 whitespace-pre-wrap break-words">
+                <p class="mt-2 text-gray-300 whitespace-pre-wrap break-words">
                   {{ c.text }}
                 </p>
               </li>
@@ -822,10 +832,10 @@ async function deleteComment(commentId, commentEmail) {
           </div>
 
           <!-- edit / delete -->
-          <div class="flex space-x-3 mt-6 border-t pt-4 justify-center">
+          <div class="flex space-x-3 mt-6 border-t border-gray-700 pt-4 justify-center">
             <button
                 v-if="selectedItinerary.traveller_email === props.currentUserEmail"
-                class="py-2 px-4 rounded-md text-white bg-blue-600 hover:bg-blue-700 transition"
+                class="py-2 px-4 bg-gray-800 border-2 border-cyan-500 text-cyan-500 rounded-md hover:bg-gray-700 transition font-bold shadow-[0_0_10px_rgba(6,182,212,0.5)]"
                 @click="startEdit"
             >
               Edit
@@ -833,7 +843,7 @@ async function deleteComment(commentId, commentEmail) {
 
             <button
                 v-if="selectedItinerary.traveller_email === props.currentUserEmail"
-                class="py-2 px-4 rounded-md text-white bg-red-600 hover:bg-red-700 transition"
+                class="py-2 px-4 bg-gray-800 border-2 border-red-500 text-red-500 rounded-md hover:bg-gray-700 transition font-bold shadow-[0_0_10px_rgba(239,68,68,0.5)]"
                 @click="deleteItinerary"
             >
               Delete
@@ -844,82 +854,82 @@ async function deleteComment(commentId, commentEmail) {
         <!-- EDIT MODE -->
         <div v-else>
           <h3
-              class="text-2xl font-bold mb-4 text-gray-800 border-b pb-2 text-center"
+              class="text-2xl font-bold mb-4 text-white border-b border-gray-700 pb-2 text-center"
           >
             Edit trip: {{ editForm.title }}
           </h3>
 
           <form @submit.prevent="saveEdit" class="space-y-4">
             <div class="flex flex-col">
-              <label class="text-sm font-medium text-gray-700">Title:</label>
+              <label class="text-sm font-medium text-gray-300">Title:</label>
               <input
                   type="text"
                   v-model="editForm.title"
                   required
-                  class="mt-1 p-2 border border-gray-300 rounded-md"
+                  class="mt-1 p-2 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500"
               >
             </div>
 
             <div class="flex flex-col">
-              <label class="text-sm font-medium text-gray-700">Destination:</label>
+              <label class="text-sm font-medium text-gray-300">Destination:</label>
               <input
                   type="text"
                   v-model="editForm.destination"
                   required
-                  class="mt-1 p-2 border border-gray-300 rounded-md"
+                  class="mt-1 p-2 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500"
               >
             </div>
 
             <div class="flex flex-col">
-              <label class="text-sm font-medium text-gray-700">Starting Date:</label>
+              <label class="text-sm font-medium text-gray-300">Starting Date:</label>
               <input
                   type="date"
                   v-model="editForm.start_date"
                   required
-                  class="mt-1 p-2 border border-gray-300 rounded-md"
+                  class="mt-1 p-2 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500"
               >
             </div>
 
             <div class="flex flex-col">
-              <label class="text-sm font-medium text-gray-700">Ending Date:</label>
+              <label class="text-sm font-medium text-gray-300">Ending Date:</label>
               <input
                   type="date"
                   v-model="editForm.end_date"
                   required
-                  class="mt-1 p-2 border border-gray-300 rounded-md"
+                  class="mt-1 p-2 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500"
               >
             </div>
 
             <div class="flex flex-col">
-              <label class="text-sm font-medium text-gray-700">Short Description:</label>
+              <label class="text-sm font-medium text-gray-300">Short Description:</label>
               <input
                   type="text"
                   v-model="editForm.short_description"
                   maxlength="80"
                   required
-                  class="mt-1 p-2 border border-gray-300 rounded-md"
+                  class="mt-1 p-2 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500"
               >
             </div>
 
             <div class="flex flex-col">
-              <label class="text-sm font-medium text-gray-700">Long Description:</label>
+              <label class="text-sm font-medium text-gray-300">Long Description:</label>
               <textarea
                   v-model="editForm.detail_description"
                   rows="5"
-                  class="mt-1 p-2 border border-gray-300 rounded-md"
+                  class="mt-1 p-2 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500"
               ></textarea>
             </div>
 
             <div class="flex space-x-3 pt-2 justify-center">
               <button
-                  class="py-2 px-4 rounded-md text-white bg-green-600 hover:bg-green-700 transition"
+                  class="py-2 px-4 rounded-md bg-gray-800 font-bold border-2 border-green-500 text-green-500 hover:bg-gray-700 transition shadow-[0_0_10px_rgba(34,197,94,0.5)]"
                   type="submit"
               >
                 Done
               </button>
 
               <button
-                  class="py-2 px-4 rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300 transition"
+                  class="py-2 px-4 rounded-md bg-gray-800 font-bold border-2 border-gray-500 text-gray-400 hover:bg-gray-700 transition shadow-[0_0_10px_rgba(156,163,175,0.5)]"
                   type="button"
                   @click="cancelEdit"
               >
@@ -929,8 +939,8 @@ async function deleteComment(commentId, commentEmail) {
 
             <p
                 :class="{
-                'text-green-600': editMessage.includes('Successfully'),
-                'text-red-600': !editMessage.includes('Successfully')
+                'text-green-400': editMessage.includes('Successfully'),
+                'text-red-400': !editMessage.includes('Successfully')
               }"
                 class="mt-3 text-sm font-medium text-center"
             >

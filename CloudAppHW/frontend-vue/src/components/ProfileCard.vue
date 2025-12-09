@@ -92,7 +92,8 @@ async function handleFileChange(e) {
     showModal({ title: 'Success', message: 'Avatar updated ✨', type: 'alert' })
   } catch (err) {
     console.error(err)
-    showModal({ title: 'Error', message: 'Upload failed', type: 'alert' })
+    const msg = err.response?.data?.message || err.message || 'Upload failed'
+    showModal({ title: 'Error', message: msg, type: 'alert' })
   } finally {
     // reset input value so you can re-upload same file again if needed
     e.target.value = ''
@@ -154,7 +155,7 @@ function resizeToJpegBlob(file, targetW, targetH, quality = 0.85) {
 
 <template>
   <div
-      class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center text-center"
+      class="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700 flex flex-col items-center text-center"
   >
     <!-- 隱藏 input -->
     <input
@@ -174,9 +175,9 @@ function resizeToJpegBlob(file, targetW, targetH, quality = 0.85) {
       <img
           :src="avatarUrl"
           @error="onAvatarError"
-          class="w-full h-full rounded-full object-cover border border-gray-300 shadow-sm cursor-pointer select-none"
+          class="w-full h-full rounded-full object-cover border border-gray-600 shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_20px_rgba(6,182,212,0.6)] cursor-pointer select-none transition-all duration-300"
           :class="{
-          'ring-2 ring-indigo-500 hover:ring-indigo-600 transition':
+          'ring-2 ring-cyan-500 hover:ring-cyan-600':
             userEmail === currentUserEmail
         }"
           alt="User Avatar"
@@ -205,8 +206,8 @@ function resizeToJpegBlob(file, targetW, targetH, quality = 0.85) {
       </div>
     </div>
 
-    <p class="text-sm text-gray-500 mt-2">user</p>
-    <p class="text-lg font-semibold text-gray-800 break-all">{{ userEmail }}</p>
+    <p class="text-sm text-gray-400 mt-2">user</p>
+    <p class="text-lg font-semibold text-white break-all">{{ userEmail }}</p>
 
     <!--    <p-->
     <!--        v-if="userEmail === currentUserEmail"-->

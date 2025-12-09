@@ -18,26 +18,26 @@ function handleCancel() {
 
 <template>
   <div v-if="modalState.visible" class="global-modal-overlay">
-    <div class="global-modal-container">
+    <div class="global-modal-container border border-gray-700">
       <!-- Title -->
-      <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ modalState.title }}</h3>
+      <h3 class="text-lg font-semibold text-white mb-2">{{ modalState.title }}</h3>
       
       <!-- Message -->
-      <p class="text-sm text-gray-600 mb-6 whitespace-pre-wrap leading-relaxed">{{ modalState.message }}</p>
+      <p class="text-sm text-gray-300 mb-6 whitespace-pre-wrap leading-relaxed">{{ modalState.message }}</p>
       
       <!-- Buttons -->
       <div class="flex justify-end space-x-3">
         <button 
           v-if="modalState.type === 'confirm'"
           @click="handleCancel"
-          class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition text-sm font-medium focus:outline-none focus:ring-2 focus:ring-gray-300"
+          class="px-4 py-2 bg-gray-800 border-2 border-gray-500 text-gray-300 rounded-lg hover:bg-gray-700 transition text-sm font-bold focus:outline-none focus:ring-2 focus:ring-gray-500 shadow-[0_0_10px_rgba(156,163,175,0.5)]"
         >
           {{ modalState.cancelText }}
         </button>
         
         <button 
           @click="handleConfirm"
-          class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-md transform hover:scale-105"
+          class="px-4 py-2 bg-gray-800 border-2 border-cyan-500 text-cyan-500 rounded-lg hover:bg-gray-700 transition text-sm font-bold focus:outline-none focus:ring-2 focus:ring-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)] transform hover:scale-105"
         >
           {{ modalState.confirmText }}
         </button>
@@ -61,7 +61,7 @@ function handleCancel() {
 }
 
 .global-modal-container {
-  background-color: white;
+  background-color: #1f2937; /* gray-800 */
   width: 90%;
   max-width: 400px;
   border-radius: 16px;

@@ -194,14 +194,14 @@ watch(isLoading, (newValue) => {
   </div>
 </div>
   </div>
-  <div class="min-h-screen bg-gray-100">
+  <div class="min-h-screen bg-black">
     <header v-if="!isLoading"
-            class="bg-indigo-600 text-white
+            class="bg-cyan-600 text-white
                py-3 px-2 rounded-lg shadow-lg mb-4
                flex justify-between items-center
                sticky top-2" style="z-index: 9999;">
       <h1 class="text-2xl font-bold flex items-center space-x-2 ">
-        <strong><span><a href="/" style="color:white">DragonFlyX</a></span></strong>
+        <strong><span><a href="/" class="text-white">DragonFlyX</a></span></strong>
         <span
             v-if="isAuthenticated && isViewingSomeoneElse"
             class="text-xs font-normal bg-white/20 rounded px-2 py-0.5"
@@ -210,38 +210,38 @@ watch(isLoading, (newValue) => {
         </span>
       </h1>
       <div v-if="userEmail" class="flex items-center space-x-3">
-        <p class="text-sm">{{ userEmail }}</p>
+        <p class="text-sm font-semibold text-white">{{ userEmail }}</p>
         <button
             @click="handleLogout"
-            class="py-1 px-3 bg-red-400 text-white text-sm font-semibold rounded-md hover:bg-red-500 transition shadow-sm z-9997"
+            class="py-1 px-3 bg-gray-800 border-2 border-red-500 text-red-500 text-sm font-bold rounded-md hover:bg-gray-700 transition shadow-[0_0_10px_rgba(239,68,68,0.5)] z-9997"
         >
           Logout
         </button>
       </div>
     </header>
     <header v-if="isLoading"
-            class="bg-indigo-600 text-white
+            class="bg-cyan-600 text-white
                py-3 px-2 rounded-lg shadow-lg mb-4
                flex justify-between items-center
                sticky top-2" style="z-index: 9999;cursor: wait;">
       <h1 class="text-2xl font-bold flex items-center space-x-2 ">
-        <strong><span><a style="color:white">DragonFlyX</a></span></strong>
+        <strong><span><a class="text-white">DragonFlyX</a></span></strong>
       </h1>
       <div class="flex items-center space-x-3">
         <h1 class="text-2xl font-bold flex items-center space-x-2 ">
-          <strong><span><a style="color:white">🐲 🚁</a></span></strong>
+          <strong><span><a class="text-white">🐲 🚁</a></span></strong>
         </h1>
       </div>
     </header>
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-7xl mx-auto">
       <div v-if="!isAuthenticated" class="lg:col-span-12">
         <div class="lg:col-span-12 space-y-6">
-          <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-            <h2 class="text-2xl font-bold mb-1 text-gray-800 text-center">🐲 DragonFlyX 🚁</h2>
-            <div class="space-y-1 text-gray-700"><p><strong>The Trip Planner.</strong></p></div>
+          <div class="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700">
+            <h2 class="text-2xl font-bold mb-1 text-white text-center">🐲 DragonFlyX 🚁</h2>
+            <div class="space-y-1 text-gray-300"><p><strong>The Trip Planner.</strong></p></div>
             <br>
-            <div class="space-y-1 text-gray-700 text-center md:text-left">
-              <p><strong>Team name:</strong> <span class="text-indigo-600">Kenting 🏖️</span></p>
+            <div class="space-y-1 text-gray-300 text-center md:text-left">
+              <p><strong>Team name:</strong> <span class="text-cyan-400">Kenting 🏖️</span></p>
               <p><strong>Team member:</strong> Po-Chun Lu</p>
               <p><strong>Professor:</strong> Dr. Markus Eilsperger</p>
             </div>
@@ -251,12 +251,12 @@ watch(isLoading, (newValue) => {
       </div>
       <template v-else>
         <div class="lg:col-span-5 space-y-6">
-          <div class="bg-white p-4 rounded-xl shadow-lg border border-gray-200">
-            <h2 class="text-2xl font-bold mb-1 text-gray-800 text-center">🐲 DragonFlyX 🚁</h2>
-            <div class="space-y-1 text-gray-700"><p><strong>The Trip Planner.</strong></p></div>
+          <div class="bg-gray-900 p-4 rounded-xl shadow-lg border border-gray-700">
+            <h2 class="text-2xl font-bold mb-1 text-white text-center">🐲 DragonFlyX 🚁</h2>
+            <div class="space-y-1 text-gray-300"><p><strong>The Trip Planner.</strong></p></div>
             <br>
-            <div class="space-y-1 text-gray-700 text-center md:text-left">
-              <p><strong>Team name:</strong> <span class="text-indigo-600">Kenting 🏖️</span></p>
+            <div class="space-y-1 text-gray-300 text-center md:text-left">
+              <p><strong>Team name:</strong> <span class="text-cyan-400">Kenting 🏖️</span></p>
               <p><strong>Team member:</strong> Po-Chun Lu</p>
               <p><strong>Professor:</strong> Dr. Markus Eilsperger</p>
             </div>
@@ -274,13 +274,13 @@ watch(isLoading, (newValue) => {
           />
           <div
               v-else
-              class="bg-yellow-50 text-yellow-800 text-sm rounded-xl border border-yellow-300 shadow p-6"
+              class="bg-yellow-900/50 text-yellow-100 text-sm rounded-xl border border-yellow-700 shadow p-6"
           >
-            <p class="font-semibold text-yellow-700 text-center">
+            <p class="font-semibold text-yellow-200 text-center">
               Viewing {{ effectiveEmail }}'s trips
             </p>
             <button
-                class="mt-4 w-full py-2 px-4 bg-yellow-400 text-black font-semibold rounded-md hover:bg-yellow-500 transition shadow-sm"
+                class="mt-4 w-full py-2 px-4 bg-gray-800 border-2 border-yellow-500 text-yellow-500 font-bold rounded-md hover:bg-gray-700 transition shadow-[0_0_10px_rgba(234,179,8,0.5)]"
                 @click="goHome"
             >
               Go to Homepage
@@ -328,7 +328,7 @@ html.is-loading {
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(5px);
   border-radius: 20px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 30px rgba(255, 255, 255, 0.2);
   padding: 5rem 5rem;
   pointer-events: all; /* 如果裡面有 spinner 或文字，讓它能互動 */
 }

@@ -187,55 +187,56 @@ const createItinerary = async () => {
 
 <template>
   <div class="space-y-6">
-    <div v-if="!isAuthenticated" class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-      <h2 class="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Register or Login</h2>
+    <div v-if="!isAuthenticated" class="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700">
+      <h2 class="text-xl font-semibold mb-4 text-white border-b border-gray-700 pb-2">Register or Login</h2>
       <form @submit.prevent class="space-y-4">
         <div class="flex flex-col">
-          <label for="authEmail" class="text-sm font-medium text-gray-700">E-mail</label>
+          <label for="authEmail" class="text-sm font-medium text-gray-300">E-mail</label>
           <input
               type="email"
               id="authEmail"
               v-model="authEmail"
               required
-              class="mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              class="mt-1 p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-cyan-500 focus:border-cyan-500 outline-none"
               placeholder="Please enter your Email"
           >
         </div>
         <div class="flex flex-col">
-          <label for="authPassword" class="text-sm font-medium text-gray-700">Password</label>
+          <label for="authPassword" class="text-sm font-medium text-gray-300">Password</label>
           <input
               type="password"
               id="authPassword"
               v-model="authPassword"
               required
-              class="mt-1 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              class="mt-1 p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-cyan-500 focus:border-cyan-500 outline-none"
               placeholder="At least 6 characters"
+              @keyup.enter="login"
           >
         </div>
         <div class="flex flex-col">
-          <label for="authName" class="text-sm font-medium text-gray-700">Name (for Register)</label>
+          <label for="authName" class="text-sm font-medium text-gray-300">Name (for Register)</label>
           <input
               type="text"
               id="authName"
               v-model="authName"
-              class="mt-1 p-2 border border-gray-300 rounded-md"
+              class="mt-1 p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-cyan-500 focus:border-cyan-500 outline-none"
               placeholder="Please enter your name"
           >
-          <p class="text-xs text-gray-500 mt-1">
+          <p class="text-xs text-gray-400 mt-1">
             First time? Use Register. Otherwise Login directly.
           </p>
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <button
-              class="w-full py-2 px-4 rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition"
+              class="w-full py-2 px-4 rounded-md bg-gray-800 border-2 border-gray-500 text-gray-400 font-bold hover:bg-gray-700 transition shadow-[0_0_10px_rgba(156,163,175,0.5)]"
               @click="register"
               type="button"
           >
             Register
           </button>
           <button
-              class="w-full py-2 px-4 rounded-md text-white bg-gray-800 hover:bg-gray-900 transition"
+              class="w-full py-2 px-4 rounded-md bg-gray-800 border-2 border-cyan-500 text-cyan-500 font-bold hover:bg-gray-700 transition shadow-[0_0_10px_rgba(6,182,212,0.5)]"
               @click="login"
               type="button"
           >
@@ -243,56 +244,66 @@ const createItinerary = async () => {
           </button>
         </div>
       </form>
-      <p :class="{'text-green-600': authMessage.includes('Successfully'), 'text-red-600': !authMessage.includes('Successfully')}" class="mt-3 text-sm font-medium">
+      <p :class="{'text-green-400': authMessage.includes('Successfully'), 'text-red-400': !authMessage.includes('Successfully')}" class="mt-3 text-sm font-medium">
         {{ authMessage }}
       </p>
     </div>
 
-    <div v-else class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-      <h2 class="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Create new trip</h2>
+    <div v-else class="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700">
+      <h2 class="text-xl font-semibold mb-4 text-white border-b border-gray-700 pb-2">Create new trip</h2>
 
       <form @submit.prevent="createItinerary" class="space-y-4">
         <div class="flex flex-col">
-          <label for="createTitle" class="text-sm font-medium text-gray-700">Title:</label>
-          <input type="text" id="createTitle" v-model="createTitle" required class="mt-1 p-2 border border-gray-300 rounded-md" placeholder="Family Trip? Honeymoon?">
+          <label for="createTitle" class="text-sm font-medium text-gray-300">Title:</label>
+          <input type="text" id="createTitle" v-model="createTitle" required class="mt-1 p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-cyan-500 focus:border-cyan-500 outline-none" placeholder="Family Trip? Honeymoon?">
         </div>
         <div class="flex flex-col">
-          <label for="createDestination" class="text-sm font-medium text-gray-700">Destination:</label>
-          <input type="text" id="createDestination" v-model="createDestination" required placeholder="Location?" class="mt-1 p-2 border border-gray-300 rounded-md">
+          <label for="createDestination" class="text-sm font-medium text-gray-300">Destination:</label>
+          <input type="text" id="createDestination" v-model="createDestination" required placeholder="Location?" class="mt-1 p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-cyan-500 focus:border-cyan-500 outline-none">
         </div>
         <div class="flex flex-col">
-          <label for="createStartDate" class="text-sm font-medium text-gray-700">Starting Date:</label>
-          <input type="date" id="createStartDate" v-model="createStartDate" required class="mt-1 p-2 border border-gray-300 rounded-md">
+          <label for="createStartDate" class="text-sm font-medium text-gray-300">Starting Date:</label>
+          <input type="date" id="createStartDate" v-model="createStartDate" required class="mt-1 p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-cyan-500 focus:border-cyan-500 outline-none">
         </div>
         <div class="flex flex-col">
-          <label for="createEndDate" class="text-sm font-medium text-gray-700">Ending Date:</label>
-          <input type="date" id="createEndDate" v-model="createEndDate" required class="mt-1 p-2 border border-gray-300 rounded-md">
+          <label for="createEndDate" class="text-sm font-medium text-gray-300">Ending Date:</label>
+          <input type="date" id="createEndDate" v-model="createEndDate" required class="mt-1 p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-cyan-500 focus:border-cyan-500 outline-none">
         </div>
         <div class="flex flex-col">
-          <label for="createShortDesc" class="text-sm font-medium text-gray-700">Short Description:</label>
-          <input type="text" id="createShortDesc" v-model="createShortDesc" maxlength="80" required class="mt-1 p-2 border border-gray-300 rounded-md" placeholder="With Who? Note?">
+          <label for="createShortDesc" class="text-sm font-medium text-gray-300">Short Description:</label>
+          <input type="text" id="createShortDesc" v-model="createShortDesc" maxlength="80" required class="mt-1 p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-cyan-500 focus:border-cyan-500 outline-none" placeholder="With Who? Note?">
         </div>
         <div class="flex flex-col">
-          <label for="createDetailDesc" class="text-sm font-medium text-gray-700">Long Description:</label>
-          <textarea id="createDetailDesc" v-model="createDetailDesc" rows="3" class="mt-1 p-2 border border-gray-300 rounded-md" placeholder="Transportation Plan? Must-eat? Must-buy? Note?"></textarea>
+          <label for="createDetailDesc" class="text-sm font-medium text-gray-300">Long Description:</label>
+          <textarea id="createDetailDesc" v-model="createDetailDesc" rows="3" class="mt-1 p-2 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-cyan-500 focus:border-cyan-500 outline-none" placeholder="Transportation Plan? Must-eat? Must-buy? Note?"></textarea>
         </div>
 
-        <button
-            class="w-full py-2 px-4 rounded-md text-white bg-green-600 hover:bg-green-700 transition"
-            type="submit"
-        >🌏 Create 🐲
-        </button>
+        <div class="relative group mt-6 pb-1">
+          <button
+              class="relative w-full py-3 px-6 rounded-xl text-white bg-black font-bold text-lg hover:text-cyan-400 transition-all duration-300 z-10 overflow-hidden shadow-[0_0_20px_rgba(192,132,252,0.4)] hover:shadow-[0_0_35px_rgba(192,132,252,0.6)]"
+              type="submit"
+          >
+            <!-- Glowing border effect -->
+            <span class="absolute inset-0 rounded-xl p-[3px] bg-[linear-gradient(90deg,#00C6FF,#0072FF,#FF00E6,#FFD700)] opacity-100 blur-[4px] group-hover:blur-[6px] transition-all duration-300 -z-10"></span>
+            
+            <!-- Inner black background -->
+            <span class="absolute inset-[3px] rounded-xl bg-gray-800 hover:bg-gray-700 -z-0"></span>
+            
+            <!-- Text -->
+            <span class="relative z-10">🌏 Create 🐲</span>
+          </button>
+        </div>
       </form>
-      <p class="text-sm font-medium text-gray-700">
+      <p class="text-sm font-medium text-gray-400 mt-2">
         Note:
       </p>
-      <p class="text-sm font-medium text-gray-700">
+      <p class="text-sm font-medium text-gray-400">
         With Creating this trip, everyone on DragonFlyX can see it.
       </p>
-      <p class="text-sm font-medium text-gray-700">
+      <p class="text-sm font-medium text-gray-400">
         Google Gemini will make a suggestion for your trip like magic!
       </p>
-      <p :class="{'text-green-600': createMessage.includes('Successfully'), 'text-red-600': !createMessage.includes('Successfully')}" class="mt-3 text-sm font-medium">
+      <p :class="{'text-green-400': createMessage.includes('Successfully'), 'text-red-400': !createMessage.includes('Successfully')}" class="mt-3 text-sm font-medium">
         {{ createMessage }}
       </p>
     </div>

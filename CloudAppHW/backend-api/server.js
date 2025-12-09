@@ -760,7 +760,7 @@ app.post('/api/upload-avatar', verifyFirebaseToken, uploadMulter.single('avatar'
     return res.status(200).send({ message: 'Avatar uploaded.' });
   } catch (err) {
     log('ERROR', 'Upload avatar error', { error: String(err?.message || err) });
-    return res.status(500).send({ message: 'Failed to upload avatar.' });
+    return res.status(500).send({ message: 'Failed to upload avatar: ' + (err.message || String(err)) });
   }
 });
 
