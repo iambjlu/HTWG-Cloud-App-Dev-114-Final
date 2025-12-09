@@ -764,6 +764,23 @@ app.post('/api/upload-avatar', verifyFirebaseToken, uploadMulter.single('avatar'
   }
 });
 
+// 13.5) AI Get Suggestion
+app.get('/api/itineraries/:id/ai', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const docRef = db.collection('aiSuggestions').doc(id);
+    const doc = await docRef.get();
+    if (!doc.exists) {
+      // 404 is expected if not ready yet
+      return res.status(404).send({ message: 'No AI suggestion found yet' });
+    }
+    return res.send(doc.data());
+  } catch (err) {
+    log('ERROR', 'get ai suggestion error', { error: String(err?.message || err) });
+    return res.status(500).send({ message: 'Failed to get AI suggestion' });
+  }
+});
+
 // ─────────────────────────────────────────────────────────────────────────────
 // 14) 全域錯誤處理與啟動日誌
 process.on('unhandledRejection', (reason) => {

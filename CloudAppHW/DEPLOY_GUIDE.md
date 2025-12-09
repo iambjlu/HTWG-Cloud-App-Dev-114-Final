@@ -56,6 +56,9 @@ This document explains how to deploy this project to OrbStack's Kubernetes envir
     -   註冊/登入並嘗試建立行程。
     -   系統會透過 Nginx 將 `/api`請求轉發給後端，後端會連接 MySQL 資料庫。
 
+*刪掉資料庫
+```kubectl delete -f CloudAppHW/k8s/mysql.yaml && kubectl apply -f CloudAppHW/k8s/mysql.yaml```
+
 ---
 
 ## English

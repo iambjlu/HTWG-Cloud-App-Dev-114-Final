@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import axios from 'axios'
+import { showModal } from '../utils/modal.js'
 
 const props = defineProps({
   userEmail: {
@@ -64,7 +65,7 @@ async function handleFileChange(e) {
       file.type !== 'image/png' &&
       !file.name.toLowerCase().endsWith('.png')
   ) {
-    alert('Only .jpg/.jpeg/.png is allowed')
+    showModal({ title: 'Invalid File', message: 'Only .jpg/.jpeg/.png is allowed', type: 'alert' })
     return
   }
 
@@ -88,10 +89,10 @@ async function handleFileChange(e) {
 
     // 成功 -> 重新載入頭貼 (破 cache)
     updateAvatarUrl()
-    alert('Avatar updated ✨')
+    showModal({ title: 'Success', message: 'Avatar updated ✨', type: 'alert' })
   } catch (err) {
     console.error(err)
-    alert('Upload failed')
+    showModal({ title: 'Error', message: 'Upload failed', type: 'alert' })
   } finally {
     // reset input value so you can re-upload same file again if needed
     e.target.value = ''

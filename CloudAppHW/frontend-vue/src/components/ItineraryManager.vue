@@ -2,6 +2,7 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue';
 import axios from 'axios';
+import { showModal } from '../utils/modal.js';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // --- AI Suggestion (Firestore polling) ---
@@ -56,6 +57,25 @@ async function startAiPolling(itineraryId, { intervalMs = 2000, maxTries = 8 } =
       clearAiTimer();
     }
   }, intervalMs);
+// --- Format AI Text (Simple Markdown) ---
+function formatAiText(text) {
+  if (!text) return '';
+  // Replace **text** with <strong>text</strong>
+  // Escape HTML first to prevent XSS (basic)
+  let safe = text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  // Bold
+  safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  // Optional: Convert bullet points (lines starting with - or *)
+  // safe = safe.replace(/^[*-] (.*)$/gm, '<li>$1</li>');
+  
+  return safe;
 }
 
 const props = defineProps({
@@ -229,7 +249,7 @@ watch(() => rawItineraries.value.length, () => { loadLikesForVisibleTrips(); });
 
 async function toggleLike(itineraryId) {
   if (!props.currentUserEmail) {
-    alert('Please login first.');
+    showModal({ title: 'Login Required', message: 'Please login first.', type: 'alert' });
     return;
   }
   try {
@@ -239,7 +259,7 @@ async function toggleLike(itineraryId) {
     likeCountMap.value[itineraryId] = Math.max(0, (likeCountMap.value[itineraryId] || 0) + (likedNow ? 1 : -1));
   } catch (err) {
     console.error('Toggle like failed', err);
-    alert('Like failed.');
+    showModal({ title: 'Error', message: 'Like failed.', type: 'alert' });
   }
 }
 
@@ -251,7 +271,7 @@ async function showLikeList(itineraryId) {
     likeListVisible.value = true;
   } catch (err) {
     console.error('Failed to load like list', err);
-    alert('Failed to load who liked this.');
+    showModal({ title: 'Error', message: 'Failed to load who liked this.', type: 'alert' });
   }
 }
 
@@ -333,16 +353,26 @@ async function saveEdit() {
 
 async function deleteItinerary() {
   if (!selectedItinerary.value) return;
-  if (window.confirm(`Delete trip "${selectedItinerary.value.title}" ?`)) {
-    try {
-      await axios.delete(`${API_BASE_URL}/api/itineraries/${selectedItinerary.value.id}`);
-      window.alert('Deleted!');
-      selectedItinerary.value = null;
-      fetchItineraries();
-    } catch (e) {
-      window.alert('Delete failed');
+
+  const currentId = selectedItinerary.value.id; // Capture ID
+  const title = selectedItinerary.value.title;
+
+  showModal({
+    title: 'Delete Trip',
+    message: `Delete trip "${title}" ?`,
+    type: 'confirm',
+    confirmText: 'Delete',
+    onConfirm: async () => {
+      try {
+        await axios.delete(`${API_BASE_URL}/api/itineraries/${currentId}`);
+        showModal({ title: 'Success', message: 'Deleted!', type: 'alert' });
+        selectedItinerary.value = null;
+        fetchItineraries();
+      } catch (e) {
+        showModal({ title: 'Error', message: 'Delete failed', type: 'alert' });
+      }
     }
-  }
+  });
 }
 
 /* ---------------- 切換顯示按鈕 ---------------- */
@@ -373,12 +403,12 @@ async function loadComments(itineraryId) {
 
 async function submitComment() {
   if (!props.currentUserEmail) {
-    alert('Please login first.');
+    showModal({ title: 'Login Required', message: 'Please login first.', type: 'alert' });
     return;
   }
   const text = newCommentText.value.trim();
   if (!text) {
-    alert('Comment cannot be empty.');
+    showModal({ title: 'Validation', message: 'Comment cannot be empty.', type: 'alert' });
     return;
   }
   if (!selectedItinerary.value) return;
@@ -392,7 +422,7 @@ async function submitComment() {
     await loadComments(selectedItinerary.value.id);
   } catch (err) {
     console.error('Failed to post comment', err);
-    alert('Failed to post comment.');
+    showModal({ title: 'Error', message: 'Failed to post comment.', type: 'alert' });
   } finally {
     postingComment.value = false;
   }
@@ -402,16 +432,21 @@ async function deleteComment(commentId, commentEmail) {
   if (commentEmail !== props.currentUserEmail) return;
   if (!selectedItinerary.value) return;
 
-  const ok = window.confirm('Delete this comment?');
-  if (!ok) return;
-
-  try {
-    await axios.delete(`${API_BASE_URL}/api/itineraries/${selectedItinerary.value.id}/comments/${commentId}`);
-    await loadComments(selectedItinerary.value.id);
-  } catch (err) {
-    console.error('Failed to delete comment', err);
-    alert('Failed to delete comment.');
-  }
+  showModal({
+    title: 'Delete Comment',
+    message: 'Delete this comment?',
+    type: 'confirm',
+    confirmText: 'Delete',
+    onConfirm: async () => {
+      try {
+        await axios.delete(`${API_BASE_URL}/api/itineraries/${selectedItinerary.value.id}/comments/${commentId}`);
+        await loadComments(selectedItinerary.value.id);
+      } catch (err) {
+        console.error('Failed to delete comment', err);
+        showModal({ title: 'Error', message: 'Failed to delete comment.', type: 'alert' });
+      }
+    }
+  });
 }
 </script>
 
@@ -658,7 +693,7 @@ async function deleteComment(commentId, commentEmail) {
               {{ selectedItinerary.detail_description }}
             </p>
             <!-- AI Suggestion block -->
-            <div v-if="selectedItinerary.aiSuggestion" class="mt-6 border-t pt-4">
+            <div v-if="selectedItinerary.aiSuggestion || (aiStatus !== 'idle' && aiStatus !== 'no_suggestion')" class="mt-6 border-t pt-4">
               <h2 class="text-3xl font-semibold mb-2 bg-[linear-gradient(90deg,_#0A84FF_0%,_#5E5CE6_20%,_#BF5AF2_40%,_#FF2D55_60%,_#FF6961_75%,_#FF9F0A_100%)] bg-clip-text text-transparent">
                 Gemini AI Travel Suggestion
               </h2>
@@ -680,8 +715,8 @@ async function deleteComment(commentId, commentEmail) {
               </div>
               <div
                   class="text-gray-700 text-sm bg-gray-100 p-3 rounded-md whitespace-pre-wrap leading-relaxed font-sans text-left border"
+                  v-html="formatAiText(selectedItinerary.aiSuggestion)"
               >
-                {{ selectedItinerary.aiSuggestion }}
               </div>
             </div>
             <!--              disclaimer-->

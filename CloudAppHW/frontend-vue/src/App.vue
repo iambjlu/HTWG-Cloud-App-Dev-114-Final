@@ -50,6 +50,8 @@ axios.interceptors.response.use(
 import AuthAndCreate from './components/AuthAndCreate.vue';
 import ItineraryManager from './components/ItineraryManager.vue';
 import ProfileCard from './components/ProfileCard.vue';
+import GlobalModal from './components/GlobalModal.vue';
+import { showModal } from './utils/modal.js';
 
 const isAuthenticated = ref(false);
 const userEmail = ref(null);
@@ -100,8 +102,18 @@ const isViewingSomeoneElse = computed(() => {
 
 function handleNoData() {
   if (isViewingSomeoneElse.value) {
-    alert("This user has no trips or does not exist. Returning to homepage.");
-    window.location.href = "/";
+    showModal({
+      title: 'User Not Found',
+      message: 'This user has no trips or does not exist. Returning to homepage.',
+      type: 'alert',
+      onConfirm: () => {
+        window.location.href = "/";
+      },
+      // Also redirect on cancel or close just in case
+      onCancel: () => {
+        window.location.href = "/";
+      }
+    });
   }
 }
 
@@ -163,6 +175,7 @@ watch(isLoading, (newValue) => {
 </script>
 
 <template>
+  <GlobalModal />
   <div class="loading-overlay" v-if="isLoading">
     <div class="loading-box">
 
