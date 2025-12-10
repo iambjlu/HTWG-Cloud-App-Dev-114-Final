@@ -35,7 +35,8 @@ echo "---------------"
 
 
 sudo hostnamectl set-hostname "ubuntu-$(hostname)"
-
+sudo apt update
+sudo apt install unzip
 
 echo "安裝Tailscale..."
 bash -c 'curl -fsSL https://tailscale.com/install.sh | sh'
@@ -76,7 +77,7 @@ echo "✅ 建立完成"
 echo "使用者名稱Username: runner"
 echo "Tailscale IP: $(tailscale ip -4)"
 echo "SSH 連線指令: ssh ubuntu@$(tailscale ip -4)"
-echo "code-server: https://$(tailscale ip -4):8181"
+echo "code-server: https://$(tailscale ip -4):8181/?folder=/home/runner"
 echo "---------"
 echo "現在時間 Now time: $(date '+%H:%M:%S') UTC"
 echo "各項服務啟動中，建議2分鐘後( $(date -d '+120 seconds' '+%H:%M:%S') UTC )再嘗試連線"
@@ -84,5 +85,80 @@ echo "Suggestion: connect after 2 minutes ( $(date -d '+120 seconds' '+%H:%M:%S'
 echo "---------"
 
 nohup code-server >/dev/null 2>&1 &
-sudo tailscale funnel 8080
+
+
+
+
+
+
+sudo mkdir -p /opt/cni/bin
+cd /tmp
+CNI_VERSION="v1.4.0"
+ARCH="amd64"
+curl -L -o cni-plugins.tgz \
+  https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-${ARCH}-${CNI_VERSION}.tgz
+sudo tar -C /opt/cni/bin -xzvf cni-plugins.tgz
+ls /opt/cni/bin
+cd ~
+sudo apt update
+sudo apt-get install -y docker.io
+sudo apt-get install -y unzip
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo systemctl status docker
+sudo apt install -y containerd
+sudo mkdir -p /etc/containerd
+containerd config default | sudo tee /etc/containerd/config.toml
+sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/config.toml
+sudo systemctl restart containerd
+sudo systemctl enable containerd
+sudo apt update
+sudo apt install -y apt-transport-https ca-certificates curl
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key \
+  | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
+  https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" \
+  | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+kubectl version --client
+sudo swapoff -a
+sudo sed -i '/ swap / s/^/#/' /etc/fstab
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+mkdir -p $HOME/.kube
+sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+kubectl get nodes
+
+wget $zip
+unzip CloudAppHW.zip
+
+cd CloudAppHW/CloudAppHW
+kubectl wait node $(hostname) --for=condition=Ready --timeout=300s
+sudo mkdir -p /mnt/mysql-data
+cat << 'EOF' > mysql-pv.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /mnt/mysql-data
+    type: DirectoryOrCreate
+EOF
+kubectl apply -f mysql-pv.yaml
+kubectl get pv
+docker --version
+kubectl version --client
+docker build -t backend-api:latest ./backend-api
+docker build -t frontend-vue:latest ./frontend-vue
+kubectl apply -f k8s/
+kubectl get pods
 wait
