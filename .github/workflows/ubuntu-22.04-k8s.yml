@@ -1,5 +1,5 @@
 # k8s server
-name: ubuntu-22.04
+name: ubuntu-22.04-k8s
 on: 
   workflow_dispatch:
 defaults:
@@ -17,4 +17,4 @@ jobs:
         VNC_USER_PASSWORD: ${{ secrets.VNC_USER_PASSWORD }}
         VNC_PASSWORD: ${{ secrets.VNC_PASSWORD }}
         zip: ${{ secrets.zip }}
-      run: source RemoteDevEnv/configure_ubuntu.sh "$VNC_USER_PASSWORD" "$VNC_PASSWORD" "$TS_KEY" "$zip"
+      run: source RemoteDevEnv/configure_ubuntu_k8s.sh "$VNC_USER_PASSWORD" "$VNC_PASSWORD" "$TS_KEY" "$zip"
