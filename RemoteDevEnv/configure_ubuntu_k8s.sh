@@ -78,6 +78,9 @@ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
   | sudo tee /etc/apt/sources.list.d/kubernetes.list
 sudo apt install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
+# Clean previous CNI configurations to prevent conflicts
+sudo rm -rf /etc/cni/net.d/*
+
 kubectl version --client
 sudo swapoff -a
 sudo sed -i '/ swap / s/^/#/' /etc/fstab
@@ -85,6 +88,7 @@ sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 mkdir -p $HOME/.kube
 sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
 # Download Flannel manifest first to ensure network stability
 curl -LO https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
 kubectl apply -f kube-flannel.yml
@@ -107,24 +111,29 @@ echo "⏳ 等待 Flannel 網路元件啟動 Waiting for Flannel..."
 kubectl rollout status daemonset/kube-flannel-ds -n kube-flannel --timeout=300s
 
 echo "⏳ 等待 Flannel 網路設定檔 Waiting for Flannel subnet.env..."
+subnet_found=false
 # Wait up to 60 seconds for the subnet.env file to be created
 for i in {1..30}; do
   if [ -f /run/flannel/subnet.env ]; then
     echo "Found Flannel subnet.env."
     cat /run/flannel/subnet.env
+    subnet_found=true
     break
   fi
   echo "Waiting for subnet.env creation... ($i)"
-  
-  # Print debug info if waiting longer than 10 seconds (5 iterations)
-  if [ $i -eq 5 ]; then 
-      echo "⚠️ Debug: Flannel Pod Status"
-      kubectl get pods -n kube-flannel -o wide
-      echo "⚠️ Debug: Flannel Logs"
-      kubectl logs -n kube-flannel -l app=flannel --tail=50 --all-containers=true
-  fi
   sleep 2
 done
+
+if [ "$subnet_found" = false ]; then
+  echo "❌ Error: Flannel subnet.env file not found after waiting."
+  echo "--- Flannel Pod Status ---"
+  kubectl get pods -n kube-flannel
+  echo "--- Flannel Pod Logs ---"
+  kubectl logs -l app=flannel -n kube-flannel --tail=50
+  echo "--- Node Status ---"
+  kubectl describe node
+  exit 1
+fi
 
 # Restart containerd to ensure CNI plugins pick up the new network config
 sudo systemctl restart containerd
