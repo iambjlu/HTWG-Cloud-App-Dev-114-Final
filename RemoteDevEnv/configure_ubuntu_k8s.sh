@@ -115,6 +115,14 @@ for i in {1..30}; do
     break
   fi
   echo "Waiting for subnet.env creation... ($i)"
+  
+  # Print debug info if waiting longer than 10 seconds (5 iterations)
+  if [ $i -eq 5 ]; then 
+      echo "⚠️ Debug: Flannel Pod Status"
+      kubectl get pods -n kube-flannel -o wide
+      echo "⚠️ Debug: Flannel Logs"
+      kubectl logs -n kube-flannel -l app=flannel --tail=50 --all-containers=true
+  fi
   sleep 2
 done
 
