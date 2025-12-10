@@ -157,17 +157,26 @@ echo "---------"
 # Wait loop to show pod status in real-time
 end=$((SECONDS+300))
 while [ $SECONDS -lt $end ]; do
-    echo "--- Pod Status ---"
-    kubectl get pods
-    echo "------------------"
+    echo "=== 🕒 Time elapsed: $((300 - (end - SECONDS)))s ==="
+    
+    echo "--- 🚀 Deployments Status ---"
+    kubectl get deploy
+    
+    echo "--- 📦 Pods Detail ---"
+    kubectl get pods -o wide
+    
+    echo "--- 📢 Recent Events (Last 10) ---"
+    kubectl get events --sort-by='.lastTimestamp' | tail -n 10
+    
+    echo "============================================="
     
     if kubectl wait --for=condition=available --timeout=1s deployment/backend deployment/frontend deployment/mysql >/dev/null 2>&1; then
         echo "✅ All deployments are ready!"
         break
     fi
     
-    echo "Waiting for pods to be ready... (re-checking in 5s)"
-    sleep 5
+    echo "Waiting for pods to be ready... (re-checking in 10s)"
+    sleep 10
 done
 
 # Final check just in case the loop timed out or exited early
