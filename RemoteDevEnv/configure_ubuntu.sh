@@ -190,4 +190,6 @@ echo "現在時間 Now time: $(date '+%H:%M:%S') UTC"
 echo "各項服務啟動中，建議2分鐘後( $(date -d '+120 seconds' '+%H:%M:%S') UTC )再嘗試連線"
 echo "Suggestion: connect after 2 minutes ( $(date -d '+120 seconds' '+%H:%M:%S') UTC ) due to services still starting"
 echo "---------"
+echo "https://github.com/iambjlu/HTWG-Cloud-App-Dev-114-Final/actions/workflows/ubuntu-22.04.yml"
+echo "---------"
 wait
