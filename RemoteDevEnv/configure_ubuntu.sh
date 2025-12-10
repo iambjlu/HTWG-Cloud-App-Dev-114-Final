@@ -133,6 +133,10 @@ sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
 kubectl get nodes
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+echo "⏳ 等待 Flannel 網路元件啟動 Waiting for Flannel..."
+kubectl wait -n kube-flannel --for=condition=ready pod --selector=app=flannel --timeout=300s
+
 
 wget $zip
 unzip CloudAppHW.zip
@@ -162,12 +166,14 @@ kubectl version --client
 docker build -t backend-api:latest ./backend-api
 docker build -t frontend-vue:latest ./frontend-vue
 kubectl apply -f k8s/
+echo "⏳ 等待應用程式啟動中 Waiting for pods to be ready..."
+kubectl wait --for=condition=available --timeout=300s deployment/backend deployment/frontend deployment/mysql
 kubectl get pods
 echo "---------"
 echo "✅ 建立完成"
 echo "使用者名稱Username: runner"
 echo "Tailscale IP: $(tailscale ip -4)"
-echo "SSH 連線指令: ssh ubuntu@$(tailscale ip -4)"
+echo "SSH 連線指令: ssh runner@$(tailscale ip -4)"
 echo "code-server: https://$(tailscale ip -4):8181/?folder=/home/runner"
 echo "---------"
 echo "現在時間 Now time: $(date '+%H:%M:%S') UTC"
