@@ -115,8 +115,9 @@ sudo systemctl restart containerd
 sudo systemctl enable containerd
 sudo apt update
 sudo apt install -y apt-transport-https ca-certificates curl
+sudo mkdir -p /etc/apt/keyrings
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key \
-  | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  | sudo gpg --dearmor --yes --batch -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] \
   https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" \
@@ -162,4 +163,15 @@ docker build -t backend-api:latest ./backend-api
 docker build -t frontend-vue:latest ./frontend-vue
 kubectl apply -f k8s/
 kubectl get pods
+echo "---------"
+echo "✅ 建立完成"
+echo "使用者名稱Username: runner"
+echo "Tailscale IP: $(tailscale ip -4)"
+echo "SSH 連線指令: ssh ubuntu@$(tailscale ip -4)"
+echo "code-server: https://$(tailscale ip -4):8181/?folder=/home/runner"
+echo "---------"
+echo "現在時間 Now time: $(date '+%H:%M:%S') UTC"
+echo "各項服務啟動中，建議2分鐘後( $(date -d '+120 seconds' '+%H:%M:%S') UTC )再嘗試連線"
+echo "Suggestion: connect after 2 minutes ( $(date -d '+120 seconds' '+%H:%M:%S') UTC ) due to services still starting"
+echo "---------"
 wait
