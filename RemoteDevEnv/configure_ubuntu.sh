@@ -101,6 +101,7 @@ sudo tar -C /opt/cni/bin -xzvf cni-plugins.tgz
 ls /opt/cni/bin
 cd ~
 sudo apt update
+sudo apt-get remove -y docker-ce docker-ce-cli containerd.io || true
 sudo apt-get install -y docker.io
 sudo apt-get install -y unzip
 sudo systemctl enable docker
