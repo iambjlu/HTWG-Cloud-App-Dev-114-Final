@@ -137,10 +137,6 @@ docker build -t backend-api:latest ./backend-api
 docker build -t frontend-vue:latest ./frontend-vue
 kubectl apply -f k8s/
 echo "⏳ 等待應用程式啟動中 Waiting for pods to be ready..."
-kubectl wait --for=condition=available --timeout=300s deployment/backend deployment/frontend deployment/mysql
-kubectl get pods
-
-
 
 echo "安裝Tailscale..."
 bash -c 'curl -fsSL https://tailscale.com/install.sh | sh'
@@ -155,6 +151,29 @@ echo "密碼Password: YOUR [VNC_USER_PASSWORD]"
 echo "Tailscale IP: $(tailscale ip -4)"
 echo "SSH 連線指令: ssh ubuntu@$(tailscale ip -4)"
 echo "---------"
+
+# Wait loop to show pod status in real-time
+end=$((SECONDS+300))
+while [ $SECONDS -lt $end ]; do
+    echo "--- Pod Status ---"
+    kubectl get pods
+    echo "------------------"
+    
+    if kubectl wait --for=condition=available --timeout=1s deployment/backend deployment/frontend deployment/mysql >/dev/null 2>&1; then
+        echo "✅ All deployments are ready!"
+        break
+    fi
+    
+    echo "Waiting for pods to be ready... (re-checking in 5s)"
+    sleep 5
+done
+
+# Final check just in case the loop timed out or exited early
+kubectl get pods
+
+
+
+
 echo "💻 安裝 code-server..."
 bash -c '
 curl -fsSL https://code-server.dev/install.sh | sh
