@@ -151,6 +151,8 @@ echo "密碼Password: YOUR [VNC_USER_PASSWORD]"
 echo "Tailscale IP: $(tailscale ip -4)"
 echo "SSH 連線指令: ssh ubuntu@$(tailscale ip -4)"
 echo "---------"
+echo "https://github.com/iambjlu/HTWG-Cloud-App-Dev-114-Final/actions/workflows/ubuntu-22.04.yml"
+echo "---------"
 
 # Wait loop to show pod status in real-time
 end=$((SECONDS+300))

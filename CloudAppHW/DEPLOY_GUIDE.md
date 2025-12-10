@@ -34,7 +34,22 @@ docker build -t backend-api:latest ./backend-api
 docker build -t frontend-vue:latest ./frontend-vue
 ```
 
-### 3. 部署至 Kubernetes (Deploy)
+### 3. 設定機密資訊 (Configure Secrets)
+
+**重要：** 本專案需要敏感的 API 金鑰才能運作。請勿直接提交真實的機密檔案到版本控制系統。
+
+1.  **複製範例檔案**
+    在 `k8s/` 目錄中，我們提供了一個範例檔。請將其複製為 `backend-secrets.yaml`：
+    ```bash
+    cp k8s/backend-secrets.example.yaml k8s/backend-secrets.yaml
+    ```
+
+2.  **填寫機密資訊**
+    使用文字編輯器打開 `k8s/backend-secrets.yaml`，並填入以下資訊：
+    *   `GEMINI_API_KEY`: 您的 Google Gemini API Key。
+    *   `GCP_SERVICE_ACCOUNT_JSON`: 您的 Google Cloud Service Account JSON 內容 (請保留完整 JSON 結構)。
+
+### 4. 部署至 Kubernetes (Deploy)
 
 使用 `kubectl` 應用 `k8s/` 目錄下的所有設定檔（包含資料庫、後端、前端與 Secrets）：
 
@@ -42,7 +57,7 @@ docker build -t frontend-vue:latest ./frontend-vue
 kubectl apply -f k8s/
 ```
 
-### 4. 檢查部署狀態 (Check Status)
+### 5. 檢查部署狀態 (Check Status)
 
 部署需要一點時間（尤其是 MySQL 初始化）。您可以使用以下指令查看 Pod 狀態：
 
@@ -52,7 +67,7 @@ kubectl get pods
 
 請等待直到所有 Pod 的狀態皆為 `Running`。
 
-### 5. 存取應用程式 (Access Application)
+### 6. 存取應用程式 (Access Application)
 
 前端服務設為 LoadBalancer 類型，您可以透過 Browser 直接訪問。
 
@@ -181,7 +196,21 @@ docker build -t backend-api:latest ./backend-api
 docker build -t frontend-vue:latest ./frontend-vue
 ```
 
-### 3. Deploy to Kubernetes
+### 3. Configure Secrets
+**Important:** This project requires sensitive API keys to function. Do not commit actual secret files to version control.
+
+1.  **Copy Example File**
+    We have provided an example file in the `k8s/` directory. Copy it to `backend-secrets.yaml`:
+    ```bash
+    cp k8s/backend-secrets.example.yaml k8s/backend-secrets.yaml
+    ```
+
+2.  **Fill in Secrets**
+    Open `k8s/backend-secrets.yaml` with a text editor and fill in the following:
+    *   `GEMINI_API_KEY`: Your Google Gemini API Key.
+    *   `GCP_SERVICE_ACCOUNT_JSON`: Your Google Cloud Service Account JSON content (keep the full JSON structure).
+
+### 4. Deploy to Kubernetes
 
 Apply all configuration files located in the `k8s/` directory (includes Database, Backend, Frontend, and Secrets):
 
@@ -189,7 +218,7 @@ Apply all configuration files located in the `k8s/` directory (includes Database
 kubectl apply -f k8s/
 ```
 
-### 4. Check Status
+### 5. Check Status
 
 Deployment might take a moment, especially for MySQL initialization. Check the status of your Pods:
 
@@ -199,7 +228,7 @@ kubectl get pods
 
 Wait until all Pods show a status of `Running`.
 
-### 5. Access the Application
+### 6. Access the Application
 
 The frontend service is configured as a LoadBalancer. You can access it via your browser.
 
