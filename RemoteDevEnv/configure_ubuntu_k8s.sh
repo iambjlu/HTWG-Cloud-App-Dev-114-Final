@@ -40,9 +40,10 @@ sudo hostnamectl set-hostname "ubuntu-$(hostname)"
 sudo apt update
 sudo apt install unzip
 
-cd ~
-wget $zip
-unzip CloudAppHW.zip
+
+
+
+
 
 sudo mkdir -p /opt/cni/bin
 cd /tmp
@@ -158,7 +159,11 @@ fi
 sudo systemctl restart containerd
 
 
-cd ~/CloudAppHW/CloudAppHW
+
+wget $zip
+unzip CloudAppHW.zip
+
+cd CloudAppHW/CloudAppHW
 kubectl wait node $(hostname) --for=condition=Ready --timeout=300s
 sudo mkdir -p /mnt/mysql-data
 cat << 'EOF' > mysql-pv.yaml
@@ -277,6 +282,8 @@ echo "---------"
 echo "現在時間 Now time: $(date '+%H:%M:%S') UTC"
 echo "各項服務啟動中，建議2分鐘後( $(date -d '+120 seconds' '+%H:%M:%S') UTC )再嘗試連線"
 echo "Suggestion: connect after 2 minutes ( $(date -d '+120 seconds' '+%H:%M:%S') UTC ) due to services still starting"
+echo "---------"
+echo "https://github.com/iambjlu/HTWG-Cloud-App-Dev-114-Final/actions/workflows/ubuntu-22.04.yml"
 echo "---------"
 sudo tailscale funnel 30501
 wait
