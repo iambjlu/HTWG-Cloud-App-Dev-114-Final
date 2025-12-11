@@ -40,10 +40,8 @@ sudo hostnamectl set-hostname "ubuntu-$(hostname)"
 sudo apt update
 sudo apt install unzip
 
-
-
-
-
+wget $zip
+unzip CloudAppHW.zip
 
 sudo mkdir -p /opt/cni/bin
 cd /tmp
@@ -158,10 +156,6 @@ fi
 # Restart containerd to ensure CNI plugins pick up the new network config
 sudo systemctl restart containerd
 
-
-
-wget $zip
-unzip CloudAppHW.zip
 
 cd CloudAppHW/CloudAppHW
 kubectl wait node $(hostname) --for=condition=Ready --timeout=300s
