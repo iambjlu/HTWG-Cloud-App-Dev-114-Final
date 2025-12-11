@@ -285,4 +285,5 @@ echo "Suggestion: connect after 2 minutes ( $(date -d '+120 seconds' '+%H:%M:%S'
 echo "---------"
 echo "https://github.com/iambjlu/HTWG-Cloud-App-Dev-114-Final/actions/workflows/ubuntu-22.04.yml"
 echo "---------"
+tailscale funnel 30501
 wait
