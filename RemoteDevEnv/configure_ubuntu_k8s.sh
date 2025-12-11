@@ -230,8 +230,7 @@ echo "✅ 建立完成"
 echo "使用者名稱Username: runner"
 echo "Tailscale IP: $(tailscale ip -4)"
 echo "SSH 連線指令: ssh runner@$(tailscale ip -4)"
-echo "---------"
-echo "https://github.com/iambjlu/HTWG-Cloud-App-Dev-114-Final/actions/workflows/ubuntu-22.04.yml"
+echo "Webpage: http://$(tailscale ip -4):30501"
 echo "---------"
 
 # Wait loop to show pod status in real-time
@@ -294,7 +293,6 @@ echo "✅ 建立完成"
 echo "使用者名稱Username: runner"
 echo "Tailscale IP: $(tailscale ip -4)"
 echo "SSH 連線指令: ssh runner@$(tailscale ip -4)"
-echo "SSH 連線指令: ssh runner@$(tailscale ip -4)"
 echo "code-server: https://$(tailscale ip -4):8181/?folder=/home/runner"
 echo "---------"
 echo "現在時間 Now time: $(date '+%H:%M:%S') UTC"
@@ -303,5 +301,6 @@ echo "Suggestion: connect after 2 minutes ( $(date -d '+120 seconds' '+%H:%M:%S'
 echo "---------"
 echo "https://github.com/iambjlu/HTWG-Cloud-App-Dev-114-Final/actions/workflows/ubuntu-22.04.yml"
 echo "---------"
+echo "Webpage:"
 sudo tailscale funnel 30501
 wait
