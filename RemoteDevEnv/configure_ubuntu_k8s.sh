@@ -40,6 +40,7 @@ sudo hostnamectl set-hostname "ubuntu-$(hostname)"
 sudo apt update
 sudo apt install unzip
 
+cd ~
 wget $zip
 unzip CloudAppHW.zip
 
@@ -157,7 +158,7 @@ fi
 sudo systemctl restart containerd
 
 
-cd CloudAppHW/CloudAppHW
+cd ~/CloudAppHW/CloudAppHW
 kubectl wait node $(hostname) --for=condition=Ready --timeout=300s
 sudo mkdir -p /mnt/mysql-data
 cat << 'EOF' > mysql-pv.yaml
