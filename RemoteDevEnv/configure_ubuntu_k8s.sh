@@ -37,6 +37,15 @@ echo "---------------"
 
 
 sudo hostnamectl set-hostname "ubuntu-$(hostname)"
+# Free up disk space on GitHub Actions Runner
+echo "🧹 Cleaning up disk space..."
+sudo rm -rf /usr/share/dotnet
+sudo rm -rf /usr/local/lib/android
+sudo rm -rf /opt/ghc
+sudo rm -rf /opt/hostedtoolcache/CodeQL
+sudo docker system prune -a -f
+df -h
+
 sudo apt update
 sudo apt install unzip
 
@@ -194,11 +203,19 @@ echo "🔄 Importing images to containerd (k8s.io namespace)..."
 docker save backend-api:latest -o backend.tar
 sudo ctr -n=k8s.io images import backend.tar
 rm backend.tar
+docker rmi backend-api:latest # Free up space in Docker Daemon
 
 # Save and import frontend image
 docker save frontend-vue:latest -o frontend.tar
 sudo ctr -n=k8s.io images import frontend.tar
 rm frontend.tar
+docker rmi frontend-vue:latest # Free up space in Docker Daemon
+
+# Prune all docker data to maximize space for K8s
+docker system prune -a -f
+
+# Check disk space
+df -h
 kubectl apply -f k8s/
 echo "⏳ 等待應用程式啟動中 Waiting for pods to be ready..."
 
@@ -276,6 +293,7 @@ echo "---------"
 echo "✅ 建立完成"
 echo "使用者名稱Username: runner"
 echo "Tailscale IP: $(tailscale ip -4)"
+echo "SSH 連線指令: ssh runner@$(tailscale ip -4)"
 echo "SSH 連線指令: ssh runner@$(tailscale ip -4)"
 echo "code-server: https://$(tailscale ip -4):8181/?folder=/home/runner"
 echo "---------"
