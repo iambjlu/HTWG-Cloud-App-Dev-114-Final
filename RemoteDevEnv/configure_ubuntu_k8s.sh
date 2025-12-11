@@ -185,8 +185,20 @@ kubectl apply -f mysql-pv.yaml
 kubectl get pv
 docker --version
 kubectl version --client
+echo "🐳 Building Docker images..."
 docker build -t backend-api:latest ./backend-api
 docker build -t frontend-vue:latest ./frontend-vue
+
+echo "🔄 Importing images to containerd (k8s.io namespace)..."
+# Save and import backend image
+docker save backend-api:latest -o backend.tar
+sudo ctr -n=k8s.io images import backend.tar
+rm backend.tar
+
+# Save and import frontend image
+docker save frontend-vue:latest -o frontend.tar
+sudo ctr -n=k8s.io images import frontend.tar
+rm frontend.tar
 kubectl apply -f k8s/
 echo "⏳ 等待應用程式啟動中 Waiting for pods to be ready..."
 
