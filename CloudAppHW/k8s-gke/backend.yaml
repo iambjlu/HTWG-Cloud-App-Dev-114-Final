@@ -56,11 +56,11 @@ spec:
                   key: GCP_SERVICE_ACCOUNT_JSON
           resources:
             requests:
-              cpu: 10m
-              memory: 64Mi
-            limits:
-              cpu: 100m
+              cpu: 200m
               memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 1024Mi
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
