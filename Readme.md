@@ -1,4 +1,3 @@
-# Not finished yet
 # [TripPlanner](CloudAppHW/)
 
 ## Cloud-native Milestone 2
