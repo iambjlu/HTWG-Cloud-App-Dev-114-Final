@@ -1,0 +1,20 @@
+# k8s server
+name: ubuntu-22.04-k8s
+on: 
+  workflow_dispatch:
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setting the environment up.
+      env:
+        TS_KEY: ${{ secrets.TS_KEY }}
+        VNC_USER_PASSWORD: ${{ secrets.VNC_USER_PASSWORD }}
+        VNC_PASSWORD: ${{ secrets.VNC_PASSWORD }}
+        zip: ${{ secrets.zip }}
+      run: source RemoteDevEnv/configure_ubuntu_k8s.sh "$VNC_USER_PASSWORD" "$VNC_PASSWORD" "$TS_KEY" "$zip"

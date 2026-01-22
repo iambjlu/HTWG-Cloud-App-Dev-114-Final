@@ -1,0 +1,2 @@
+uvx locust -f simple.py --host https://camping.htwg-cloud.org
+uvx locust -f quote.py --host https://camping.htwg-cloud.org

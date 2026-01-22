@@ -1,0 +1,101 @@
+# ================================
+# Environment and Secrets
+# ================================
+.env
+.env.*
+!.env.example
+secrets/
+backend-secrets.yaml
+*.pem
+*.key
+*.crt
+
+# ================================
+# Terraform
+# ================================
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfvars
+terraform/credentials.json
+*.tfplan
+
+# ================================
+# Node.js
+# ================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+package-lock.json
+
+# ================================
+# Python (Locust)
+# ================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+ENV/
+.pytest_cache/
+
+# ================================
+# IDE and Editors
+# ================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# ================================
+# OS Generated Files
+# ================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ================================
+# Build Outputs
+# ================================
+dist/
+build/
+*.local
+
+# ================================
+# Logs
+# ================================
+logs/
+*.log
+lerna-debug.log*
+
+# ================================
+# Docker
+# ================================
+*.tar
+
+# ================================
+# Kubernetes Secrets (Local)
+# ================================
+*-secrets.yaml
+!*-secrets.example.yaml
+
+# ================================
+# Misc
+# ================================
+.cache/
+coverage/
+.nyc_output/
+*.bak

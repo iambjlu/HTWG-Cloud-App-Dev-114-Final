@@ -1,0 +1,169 @@
+# Not finished yet
+# [TripPlanner](CloudAppHW/)
+
+## Cloud-native Milestone 2
+
+### Overview
+
+The prototype of your social travel management application has received positive feedback from
+investors and has received new funding. Market analysis suggests that you should offer it as
+SaaS B2B solution with different plans:
+
+- **Free:** No Price, Best Effort, No Customisation
+- **Standard:** Attractive Price, SLA, Few Customisation (White Labelling)
+- **Enterprise:** Premium Price, SLA, Highly Customisable
+
+As a next step the standard solution should be implemented with the following main functional
+areas. The existing itinerary management should be improved. The social features should be
+expanded. New features should be added for destination management and/or travel
+information.
+
+---
+
+### Itinerary Management
+
+The trip planning features for traveller define for milestone 1 are considered as hygiene factors.
+Extend the Itinerary management features as necessary to supper the features of the other
+functional areas. Example: For flight schedule changes to work properly, you would need the
+departing airport and flight number in the travel plan.
+
+---
+
+### Social Interaction
+
+The trip planning features for traveller defined for milestone 1 are considered as hygiene factors.
+The features for social interaction should be implemented as separate microservice.
+
+Wow factors could be:
+- A personalized live feed with content from other travellers which are relevant for me.
+- A personalized news letter with content from other travellers which are relevant for me.
+- A recommendation engine proposing activities.
+
+---
+
+### Destination Management (All Wow Factors)
+
+A service for travel destinations to get access to travellers into their region. A destination gets
+access to the system and can:
+
+- Buy advertisement placements for events at that destination
+- Place special offers for accommodations at that location
+- Market discounts for local attractions like museums.
+
+---
+
+### Travel Information (All Wow Factors)
+
+Service which provides useful information to travellers and helps them manage their travel. Travel
+information parses external data sources on a regular basis or gets push information from
+external sources. This information is compared with travel plans and travellers are notified about
+events which may have impact on their travel.
+
+- Parse information about flight schedule changes and inform travellers
+- Receives information about official travel warnings (e.g. natural disasters, social or
+political unrest) and warn travellers.
+- Process weather information and provide value added information to the travellers.
+
+---
+
+### Task
+
+Define the functional scope and high-level design of your cloud application and document it in a
+Cloud Project Software Architecture Document. Your application should follow the micro service
+paradigm.
+
+Implementing one Wow factor is considered limited, implementing two Wow factors in different
+microservices is considered very good. Each Wow factor should be implemented partially as
+asynchronous workload to allow for efficient processing of the data. Control mechanisms for
+these workflows should be provided. For a very good implementation you should also provide test
+data sets to validate the scalability of your workloads.
+
+---
+
+### Technical Requirements
+
+- The application has a micro-service architecture and follows the 12F principles.
+- Core components of the application are deployed in Kubernetes
+- Deployment of application is automated through IaC.
+- There are performance testing scripts and a performance test reports for the application.
+
+---
+---
+
+## 雲端原生里程碑2
+
+### 概述
+
+你的社交旅遊管理應用程式原型已獲得投資人正面回饋，並成功取得新一輪資金。市場分析顯示，你應該將此產品以 SaaS B2B 解決方案的形式提供，並區分為不同方案：
+
+- **Free（免費）：** 無費用、最佳努力（Best Effort）、不提供客製化
+- **Standard（標準）：** 具吸引力的價格、提供 SLA、少量客製化（白牌／White Labelling）
+- **Enterprise（企業級）：** 高價方案、提供 SLA、高度客製化
+
+作為下一步，需實作標準方案（Standard），並涵蓋以下主要功能領域。同時，既有的行程管理功能需加以強化；社交功能需擴充；並新增目的地管理與／或旅遊資訊相關功能。
+
+---
+
+### 行程管理（Itinerary Management）
+
+在里程碑 1 中為旅客定義的旅遊規劃功能被視為基本必備（hygiene factors）。
+請視需要擴充行程管理功能，以支援其他功能領域的需求。
+例如：若要正確處理航班時刻變更，旅遊計畫中必須包含出發機場與航班號碼。
+
+---
+
+### 社交互動（Social Interaction）
+
+在里程碑 1 中為旅客定義的旅遊規劃功能同樣被視為基本必備。
+社交互動相關功能應以獨立的微服務方式實作。
+
+可帶來「Wow」效果的功能包括：
+- 個人化即時動態牆，顯示與我相關的其他旅客內容
+- 個人化電子報，推送與我相關的其他旅客內容
+- 推薦引擎，主動建議活動
+
+---
+
+### 目的地管理（Destination Management，全部為 Wow 因素）
+
+提供旅遊目的地使用的服務，讓其能接觸前往該地區的旅客。
+目的地可存取系統並進行以下操作：
+
+- 購買該目的地活動的廣告版位
+- 發布該地點住宿的特別優惠
+- 行銷當地景點（如博物館）的折扣資訊
+
+---
+
+### 旅遊資訊（Travel Information，全部為 Wow 因素）
+
+此服務提供對旅客有用的資訊，協助其管理行程。
+旅遊資訊會定期解析外部資料來源，或接收外部系統推送的即時資訊。
+系統會將這些資訊與旅遊計畫進行比對，並在可能影響行程時通知旅客。
+
+功能包括：
+- 解析航班時刻變更資訊並通知旅客
+- 接收官方旅遊警示（如天災、社會或政治動盪）並警告旅客
+- 處理天氣資訊，並提供加值資訊給旅客
+
+---
+
+### 任務（Task）
+
+請定義此雲端應用程式的功能範圍與高階設計，並撰寫一份 Cloud Project Software Architecture Document。
+你的應用程式必須遵循微服務架構原則。
+
+- 實作 1 個 Wow 因素：視為基本完成
+- 實作 2 個位於不同微服務中的 Wow 因素：視為非常好
+- 每個 Wow 因素應至少部分採用非同步工作流程，以提升資料處理效率
+- 需提供這些工作流程的控制機制
+- 若要達到非常優秀的實作，還需提供測試資料集以驗證工作負載的可擴展性
+
+---
+
+### 技術需求（Technical Requirements）
+
+- 應用程式採用微服務架構，並遵循 12F 原則
+- 核心元件需部署於 Kubernetes
+- 應用程式部署須透過 IaC（Infrastructure as Code） 自動化完成
+- 需提供效能測試腳本與效能測試報告

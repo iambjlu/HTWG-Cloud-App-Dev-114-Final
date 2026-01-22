@@ -1,0 +1,28 @@
+# Terraform State Files (敏感資訊)
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# 敏感設定檔
+terraform.tfvars
+credentials.json
+*.pem
+*.key
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration
+.terraformrc
+terraform.rc
+
+# macOS
+.DS_Store
